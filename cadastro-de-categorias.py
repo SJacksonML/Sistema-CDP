@@ -10,8 +10,8 @@ class Categoria:
     self.tipo = tipo
     self.limite_mensal = limite_mensal
     self.descrição = descrição
-def cadastar(self, nome_categoria)
-"""
-A priori, vamos esboçar essa função da forma mais robusta possível, uma função que cadastra novas categorias. Depois vemos como isso se comporta para casos especiais: nome de formato inválido, nome repetido, etc.
-"""
-  pass
+  def cadastar(self, nome_categoria)
+  """
+  A priori, vamos esboçar essa função da forma mais robusta possível, uma função que cadastra novas categorias. Depois vemos como isso se comporta para casos especiais: nome de formato inválido, nome repetido, etc.
+  """
+    pass
