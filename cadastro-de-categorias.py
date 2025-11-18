@@ -14,3 +14,4 @@ def cadastar(self, nome_categoria)
 """
 A priori, vamos esboçar essa função da forma mais robusta possível, uma função que cadastra novas categorias. Depois vemos como isso se comporta para casos especiais: nome de formato inválido, nome repetido, etc.
 """
+  pass
