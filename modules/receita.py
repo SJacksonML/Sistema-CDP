@@ -1,10 +1,14 @@
-from .lancamentos import Lancamento
+from modules.lancamentos import Lancamento
 
 class Receita(Lancamento):
-    """Classe que representa uma entrada de dinheiro."""
+    tipo = 'receita'
 
     def executar(self, saldo):
-        saldo._alterar_saldo(self._valor)
+        # soma o valor ao saldo, tentando analisar ele como objeto ou número e se adequando
+        try:
+            saldo._alterar_saldo(self.valor)
+        except Exception:
+            return (saldo or 0) + self.valor
 
     def __str__(self):
-        return f"[RECEITA] {self.descricao}: +R${self.valor:.2f}"
+        return f"[RECEITA] {self.descricao or ''}: +R${self.valor:.2f}"

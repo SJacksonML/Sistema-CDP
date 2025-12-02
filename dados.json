@@ -1,0 +1,46 @@
+{
+    "categorias": [
+        {
+            "nome": "Carro",
+            "tipo": "despesa",
+            "limite_mensal": null,
+            "descricao": ""
+        },
+        {
+            "nome": "carro",
+            "tipo": "despesa",
+            "limite_mensal": null,
+            "descricao": ""
+        },
+        {
+            "nome": "Casa",
+            "tipo": "despesa",
+            "limite_mensal": 5000.5,
+            "descricao": ""
+        },
+        {
+            "nome": "Trabalho",
+            "tipo": "receita",
+            "limite_mensal": null,
+            "descricao": ""
+        }
+    ],
+    "lancamentos": [
+        {
+            "tipo": "despesa",
+            "valor": 131534.0,
+            "categoria": null,
+            "data_lancamento": "2025-12-02",
+            "descricao": "barroada feia",
+            "forma_pagamento": "crédito"
+        },
+        {
+            "tipo": "receita",
+            "valor": 200000.0,
+            "categoria": "Trabalho",
+            "data_lancamento": "2025-12-02",
+            "descricao": "salário caiu",
+            "forma_pagamento": null
+        }
+    ]
+}

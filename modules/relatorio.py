@@ -1,47 +1,36 @@
-class Relatorio:
-    def __init__(self, orcamentos: list):
-        self.orcamentos = orcamentos
-      # Ainda há dificuldade em evidenciar em que formato seria agradável receber o relatório, partirei do mais básico e sem orientação por hora.
+from collections import defaultdict
 
+class Relatorio:
+    """Gera relatórios a partir de uma lista de objetos Lancamento"""
+# Isso aqui deu trabalho, lembrar de valorizar 
+
+    def __init__(self, lancamentos):
+        self.lancamentos = lancamentos or []
 
     def total_por_categoria(self):
-        resumo = {}
+        resumo = defaultdict(float)
         for l in self.lancamentos:
-            resumo.setdefault(l.categoria.nome, 0)
-            resumo[l.categoria.nome] += l.valor if l.tipo == "despesa" else -l.valor
-        return resumo
+            nome = l.categoria.nome if l.categoria else 'Sem categoria'
+            if getattr(l, 'tipo', '') == 'despesa':
+                resumo[nome] += l.valor
+            else:
+                resumo[nome] -= l.valor
+        return dict(resumo)
+
+    def saldo_total(self):
+        saldo = 0.0
+        for l in self.lancamentos:
+            if getattr(l, 'tipo', '') == 'despesa':
+                saldo -= l.valor
+            else:
+                saldo += l.valor
+        return saldo
 
     def imprimir(self):
-        print("--- RELATÓRIO FINANCEIRO ---")
-        for categoria, total in self.total_por_categoria().items():
-            print(f"{categoria}: R$ {total:.2f}")
-
-    def despesas_por_categoria(self):
-        """
-        Gera um relatório de despesas por categoria.
-         """
-        pass
-
-    def despesas_por_pagamento(self):
-        """
-        Gera um relatório de despesas por forma de pagamento.
-        """
-        pass
-
-    def percentual_por_categoria(self):
-        """
-        Gera um relatório do percentual gasto por categoria.
-        """
-        pass
-
-    def mes_mais_economico(self):
-        """
-        Identifica o mês com menor gasto total.
-        """
-        pass
-
-    def comparativo_3_meses(self):
-        """
-        Gera um comparativo de gastos dos últimos 3 meses.
-        """
-        pass
+        # Um print pra ter um feedback por enquanto
+        # Marcando para verificar necessidade após aplicação em um front bacana
+        print('--- RELATÓRIO SIMPLES ---')
+        print('\nTotal por categoria:')
+        for cat, total in self.total_por_categoria().items():
+            print(f'  {cat}: R$ {total:.2f}')
+        print(f'\nSaldo total: R$ {self.saldo_total():.2f}')

@@ -1,104 +1,85 @@
-"""Corrdenação rpincipal do sistema"""
-# Estou testando um módulo responsável pelo gerenciammento geral do programa,
-# pois a dificuldade em implementar um JSON me fez recorrer a tentativa e erro
-     
-from cdt_categorias import Categoria
-from receita import Receita
-from despesa import Despesa
-from relatorio import Relatorio
-from repositorio import RepositorioJSON
+from modules.cdt_categorias import Categoria
+from modules.receita import Receita
+from modules.despesa import Despesa
+from modules.relatorio import Relatorio
+from modules.repositorio import RepositorioJSON
 
 class Sistema:
-    def __init__(self, caminho_dados="dados.json"):
-        # Vai servir pra rmazenamento interno
-        self.categorias: dict[str, Categoria] = {}
-        self.lancamentos: list = []
+    """Orquestra categorias, lancamentos e persistencia."""
+    # Aqui estou implementando uma classe 'Orquestra' para organizar a casa
+    # A priori, é pra ficar mais didático, ainda tô testando, lembrar de revisar
+    # os parâmetros disso depois
 
-        # PUma persistência
+    def __init__(self, caminho_dados='dados.json'):
+        self.categorias = {}  
+        self.lancamentos = []  
         self.repo = RepositorioJSON(caminho_dados)
+        self.carregar()  
 
-        # Tenta carregar dados já existentes
-        self.carregar()
-
-    def adicionar_categoria(self, nome: str, limite: float | None = None):
-        """Cria uma categoria se não houver"""
+    def adicionar_categoria(self, nome: str, tipo: str = 'despesa', limite: float = None):
         if nome in self.categorias:
             print(f"[AVISO] Categoria '{nome}' já existe.")
-            return
-
-        self.categorias[nome] = Categoria(nome, limite)
+            return self.categorias[nome]
+        cat = Categoria(nome, tipo, limite)
+        self.categorias[nome] = cat
         print(f"Categoria '{nome}' criada.")
+        return cat
 
-    def adicionar_receita(self, categoria_nome: str, valor: float):
-        """Cria uma receita associada a uma categoria"""
-        categoria = self.categorias.get(categoria_nome)
-
-        if not categoria:
-            print(f"[ERRO] Categoria '{categoria_nome}' não encontrada.")
+    def listar_categorias(self):
+        if not self.categorias:
+            print('Nenhuma categoria cadastrada.')
             return
+        for c in self.categorias.values():
+            print(f"- {c}")
 
-        nova_receita = Receita(valor, categoria)
-        self.lancamentos.append(nova_receita)
-
-        print("[OK] Receita registrada.")
-
-    def adicionar_despesa(self, categoria_nome: str, valor: float):
-        """Cria uma despesa associada a uma categoria"""
-        categoria = self.categorias.get(categoria_nome)
-
-        if not categoria:
-            print(f"[ERRO] Categoria '{categoria_nome}' não encontrada.")
+    def criar_lancamento(self, tipo: str = 'despesa'):
+        try:
+            valor = float(input('Valor: ').strip())
+        except ValueError:
+            print('Valor inválido.')
             return
+        self.listar_categorias()
+        cat_nome = input('Nome da categoria (ou enter para sem categoria): ').strip()
+        categoria = self.categorias.get(cat_nome) if cat_nome else None
+        data = input('Data (YYYY-MM-DD) [enter para hoje]: ').strip() or None
+        descricao = input('Descrição (opcional): ').strip() or None
+        forma = input('Forma de pagamento (opcional): ').strip() or None
 
-        nova_despesa = Despesa(valor, categoria)
-        self.lancamentos.append(nova_despesa)
+        if tipo == 'receita':
+            obj = Receita(valor, categoria, data, descricao, forma)
+        else:
+            obj = Despesa(valor, categoria, data, descricao, forma)
+        self.lancamentos.append(obj)
+        print('Lançamento adicionado:', obj)
 
-        print("[OK] Despesa registrada.")
+    def listar_lancamentos(self):
+        if not self.lancamentos:
+            print('Nenhum lançamento.')
+            return
+        for l in self.lancamentos:
+            print(f"- {l}")
 
     def gerar_relatorio(self):
-        rel = Relatorio(self.lancamentos)
-        rel.exibir()
-
-    def carregar(self):
-        dados = self.repo.carregar()
-        if not dados:
-            return
-
-        # carregar Categorias
-        for c in dados.get("categorias", []):
-            self.categorias[c["nome"]] = Categoria(
-                nome=c["nome"],
-                limite=c.get("limite")
-            )
-
-        # carregar Lançamentos
-        for l in dados.get("lancamentos", []):
-            categoria = self.categorias.get(l["categoria"])
-            if not categoria:
-                continue
-
-            if l["tipo"] == "receita":
-                obj = Receita(l["valor"], categoria)
-            else:
-                obj = Despesa(l["valor"], categoria)
-
-            self.lancamentos.append(obj)
+        r = Relatorio(self.lancamentos)
+        r.imprimir()
 
     def salvar(self):
         dados = {
-            "categorias": [
-                {"nome": c.nome, "limite": c.limite}
-                for c in self.categorias.values()
-            ],
-            "lancamentos": [
-                {
-                    "tipo": lanc.tipo,
-                    "valor": lanc.valor,
-                    "categoria": lanc.categoria.nome,
-                }
-                for lanc in self.lancamentos
-            ],
+            'categorias': [c.to_dict() for c in self.categorias.values()],
+            'lancamentos': [l.to_dict() for l in self.lancamentos]
         }
-
         self.repo.salvar(dados)
-        print("[OK] Dados salvos com sucesso.")
+        print('[OK] Dados salvos.')
+
+    def carregar(self):
+        dados = self.repo.carregar() or {}
+        for cdict in dados.get('categorias', []):
+            c = Categoria(cdict.get('nome'), cdict.get('tipo', 'despesa'), cdict.get('limite_mensal'), cdict.get('descricao', ''))
+            self.categorias[c.nome] = c
+        for ldict in dados.get('lancamentos', []):
+            cat = self.categorias.get(ldict.get('categoria'))
+            if ldict.get('tipo') == 'receita':
+                obj = Receita(ldict.get('valor', 0), cat, ldict.get('data_lancamento'), ldict.get('descricao'), ldict.get('forma_pagamento'))
+            else:
+                obj = Despesa(ldict.get('valor', 0), cat, ldict.get('data_lancamento'), ldict.get('descricao'), ldict.get('forma_pagamento'))
+            self.lancamentos.append(obj)
