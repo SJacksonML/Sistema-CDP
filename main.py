@@ -1,35 +1,50 @@
-#Sérios problemas com o print de utf-8, isso aqui força a sair com as acentuações que eu quero.
-import sys
-sys.stdout.reconfigure(encoding='utf-8')
+# Aqui venho com uma outra proposta de interação, mais focada em usabilidade
+# A ideia é um pequeno menu, para testar as funcionalidades do sistema
+# Como tudo, não sei se voou manter até uma visualização do programa
+# Lembrar de rever parâmetros de seleção das opções caso altere o modo de interação com o código
 
-#Abaixo, estou importando para a main todas as classes que usarei para os testes iniciais.
-from modules.receita import Receita
-from modules.despesa import Despesa
-from modules.saldo import Saldo
-from modules.grd_categorias import GerenciadorCategorias
+from modules.sistema import Sistema
 
-# Abaixo, apenas testes realizados diretamente na main para entender o funcionnamento do programa até aqui.
-manager = GerenciadorCategorias()
-manager.cadastrar("Salário", "receita", 0)
-manager.cadastrar("Alimentação", "despesa", 500)
-manager.cadastrar("Transporte", "despesa", 300)
+def main():
+    s = Sistema()
+    while True:
+        print("""\
+===== ALVO - um Sistema de Controle de Despesas Pessoais =====
+1) Listar categorias
+2) Adicionar categoria
+3) Listar lançamentos
+4) Adicionar despesa
+5) Adicionar receita
+6) Gerar relatório
+7) Salvar e sair
+0) Sair sem salvar
+""")
+        opt = input("Escolha: ").strip()
+        if opt == "1":
+            s.listar_categorias()
+        elif opt == "2":
+            nome = input("Nome da categoria: ").strip()
+            tipo = input("Tipo (receita/despesa/ambos) [despesa]: ").strip() or 'despesa'
+            limite = input("Limite (opcional): ").strip()
+            limite = float(limite) if limite else None
+            s.adicionar_categoria(nome, tipo, limite)
+        elif opt == "3":
+            s.listar_lancamentos()
+        elif opt == "4":
+            s.criar_lancamento('despesa')
+        elif opt == "5":
+            s.criar_lancamento('receita')
+        elif opt == "6":
+            s.gerar_relatorio()
+        elif opt == "7":
+            s.salvar()
+            print('Dados salvos. Saindo.')
+            break
+        elif opt == "0":
+            print('Saindo sem salvar.')
+            break
+        else:
+            print('Opção inválida.')
 
-for test in manager.listar():
-    print(test)
-
-saldo = Saldo()
-r1 = Receita(247.16, "Trabalho", "25/11/2025", "Bonificacao do trabalho", "PIX")
-d1 = Despesa(1112.20, "Carro", "26/11/2025", "Manutencao do carro", "Credito")
-d2 = Despesa(23.50, "Alimentacao", "26/11/2025", "Almoco no centro", "Debito")
-
-print(r1)
-r1.executar(saldo)
-print(saldo)
-
-print(d1)
-d1.executar(saldo)
-print(saldo)
-
-print(d2)
-d2.executar(saldo)
-print(saldo)
+if __name__ == '__main__':
+    main()
