@@ -19,7 +19,7 @@ class GerenciadorCategorias:
         return nova_categoria
 
     def existe_categoria(self, nome):
-        return any(c.nome.lower() == nome.lower() for c in self._categorias)
+        return any(x.nome.lower() == nome.lower() for x in self._categorias)
 
     def listar(self):
         return list(self._categorias)
