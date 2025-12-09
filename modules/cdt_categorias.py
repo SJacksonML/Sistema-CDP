@@ -6,6 +6,9 @@ class Categoria:
         self._tipo = str(tipo).lower()
         self._limite_mensal = None if limite_mensal is None else float(limite_mensal)
         self._descricao = descricao
+        
+        if self._tipo == 'receita' and self._limite_mensal is not None:
+            raise ValueError("Categorias de receita não podem ter limite de gastos.")
 
     @property
     def nome(self):
