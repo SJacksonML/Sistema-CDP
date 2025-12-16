@@ -114,14 +114,25 @@ class Sistema:
 
     def gerar_relatorio(self):
         r = Relatorio(self.lancamentos)
-        
-        print("\n======= ESTATÍTICAS =======")
-        r.percentual_por_categoria()
-        r.top_categorias()
-        r.media_mensal()
-        print("=============================")
-        
-        r.imprimir()
+
+        print("\n======= RELATÓRIO ANALÍTICO =======\n")
+
+        percentuais = r.percentual_por_categoria()
+        print("Percentual de gastos por categoria:")
+        for cat, dados in percentuais.items():
+            print(f"- {cat}: {dados['percentual']:.2f}% (R$ {dados['valor']:.2f})")
+
+        print("\nTop 3 categorias por gasto:")
+        top = r.top_categorias()
+        for i, (cat, valor) in enumerate(top, start=1):
+            print(f"{i}. {cat} — R$ {valor:.2f}")
+
+        media_receita, media_despesa = r.media_mensal()
+        print("\nMédia mensal:")
+        print(f"- Receita média: R$ {media_receita:.2f}")
+        print(f"- Despesa média: R$ {media_despesa:.2f}")
+
+        print("\n=================================")
 
     def salvar(self):
         self._atualizar_saldo()
