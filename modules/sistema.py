@@ -114,6 +114,13 @@ class Sistema:
 
     def gerar_relatorio(self):
         r = Relatorio(self.lancamentos)
+        
+        print("\n======= ESTATÍTICAS =======")
+        r.percentual_por_categoria()
+        r.top_categorias()
+        r.media_mensal()
+        print("=============================")
+        
         r.imprimir()
 
     def salvar(self):
