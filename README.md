@@ -58,7 +58,7 @@ Este projeto tem como objetivo fornecer ferramentas de fácil uso para rastrear 
 
 - Uma importante classe. Aqui é calculado o montante do Saldo atual, que servirá de parâmetro para muitas outras classes. Seus atributos são privados para evitar alterações fora do esperado.
 
-### Classe; Sistema
+### Classe: Sistema
 
 - Usa o conceito de Classe Orquestra. É a responsável por chamar métodos de classes, garantir persistência e não bugar o JSON.
 
@@ -168,20 +168,6 @@ Este projeto tem como objetivo fornecer ferramentas de fácil uso para rastrear 
 - Relacionamentos
 
   - Se relaciona com a classe pai e altera o valor de ``Saldo``
-
-### Classe: Orcamento
-
-- Atributos
-
-  - 
-
-- Métodos
-
-  - 
-
-- Relacionamentos
-
-  - 
 
 ### Classe: Relatorio
 
