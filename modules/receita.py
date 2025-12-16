@@ -11,4 +11,9 @@ class Receita(Lancamento):
             return (saldo or 0) + self.valor
 
     def __str__(self):
-        return f"[RECEITA] {self.descricao or ''}: +R${self.valor:.2f}"
+        data = self.data_lancamento
+        return (
+            f"[RECEITA] {self.descricao} "
+            f"| +R${self.valor:.2f} "
+            f"| Data: {data}"
+        )

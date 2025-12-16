@@ -22,4 +22,9 @@ class Despesa(Lancamento):
             return (saldo or 0) - self.valor
 
     def __str__(self):
-        return f"[DESPESA] {self.descricao or ''}: -R${self.valor:.2f}"
+        data = self.data_lancamento
+        return (
+            f"[DESPESA] {self.descricao} "
+            f"| -R${self.valor:.2f} "
+            f"| Data: {data}"
+        )

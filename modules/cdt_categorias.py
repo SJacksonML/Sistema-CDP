@@ -2,7 +2,7 @@ class Categoria:
     """Classe de 'cadastro' de categorias novas e definição dos parâmetros de categorias"""
 
     def __init__(self, nome: str, tipo: str = 'despesa', limite_mensal: float = None, descricao: str = ''):
-        self._nome = str(nome)
+        self._nome = str(nome).lower()
         self._tipo = str(tipo).lower()
         self._limite_mensal = None if limite_mensal is None else float(limite_mensal)
         self._descricao = descricao
@@ -36,7 +36,7 @@ class Categoria:
 
     def __str__(self):
         lim = f" (limite: R${self.limite_mensal:.2f})" if self.limite_mensal else ''
-        return f"Categoria[{self.tipo}] {self.nome}{lim}"
+        return f"Categoria [{self.tipo}]: {self.nome}{lim}"
 
     def __repr__(self):
         return f"Categoria(nome='{self.nome}', tipo='{self.tipo}', limite={self.limite_mensal})"
