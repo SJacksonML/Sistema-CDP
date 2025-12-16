@@ -62,7 +62,13 @@ class Relatorio:
         despesas = defaultdict(float)
 
         for l in self.lancamentos:
-            mes = l.data_lancamento.strftime("%Y-%m")
+            data = l.data_lancamento
+
+            if isinstance(data, str):
+                data = datetime.strptime(data, "%Y-%m-%d")
+
+            mes = data.strftime("%Y-%m")
+
             if l.tipo == "receita":
                 receitas[mes] += l.valor
             else:

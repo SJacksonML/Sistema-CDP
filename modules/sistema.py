@@ -74,7 +74,7 @@ class Sistema:
 
         while True:
             data = input(
-                "\nData do lançamento (YYYY-MM-DD, ENTER para hoje): "
+                "\nData do lançamento (YYYY-MM-DD): "
             ).strip()
 
             if not data:
@@ -135,7 +135,7 @@ class Sistema:
         print("\n=================================")
 
     def salvar(self):
-        self._atualizar_saldo()
+        self.atualizar_saldo()
 
         dados = {
             'categorias': [c.to_dict() for c in self.categorias.values()],
