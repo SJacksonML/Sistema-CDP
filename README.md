@@ -6,6 +6,10 @@ Projeto de POO - Engenharia de Software.
 
 Este projeto tem como objetivo fornecer ferramentas de fácil uso para rastrear gastos financeiros a fim de promover melhor economia a nível doméstico.
 
+## Objetivo Educacional
+
+Desenvolver habilidades de POO utilizando linguagem Python através de um sistema desafiador e de grande utilidade para qualquer usuário.
+
 ## Funcionalidades Principais
 
 - Cadastro de categorias
@@ -235,7 +239,3 @@ Este projeto tem como objetivo fornecer ferramentas de fácil uso para rastrear 
 - Relacionamentos
 
   - Define todos os parâmetros do programa como uma Orquestra, dando tudo que for necessário para manipulação na main
-
-## Objetivo Educacional
-
-Desenvolver habilidades de POO utilizando linguagem Python através de um sistema desafiador e de grande utilidade para qualquer usuário.
